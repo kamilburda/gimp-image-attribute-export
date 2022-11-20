@@ -22,7 +22,7 @@ else:
 
 
 try:
-  import xml.etree
+  from xml.etree import ElementTree as ET
 except ImportError:
   _xml_module_loaded = False
 else:
@@ -33,6 +33,7 @@ import collections
 
 
 _TEXT_ENCODING = 'utf-8'
+_INDENT = 4
 
 _image_base_types = {
   getattr(gimpenums, base_type): base_type
@@ -41,7 +42,45 @@ _image_base_types = {
 
 
 def save_xml(image, drawable, filepath, filename):
-  pass
+  metadata = _get_metadata(image)
+  
+  root = ET.Element('image')
+  root.text = '\n' + ' ' * _INDENT
+  
+  elements = [[key, value, root, 1, False] for key, value in metadata['image'].items()]
+  elements[-1][-1] = True
+  
+  while elements:
+    key, value, parent, depth, is_last = elements.pop(0)
+    
+    if isinstance(value, (tuple, list, dict)):
+      element = ET.SubElement(parent, key)
+      
+      child_depth = depth + 1
+      element.text = '\n' + ' ' * child_depth * _INDENT
+      if not is_last:
+        element.tail = '\n' + ' ' * depth * _INDENT
+      else:
+        element.tail = '\n' + ' ' * (depth - 1) * _INDENT
+      
+      if isinstance(value, dict):
+        for child_key, child_value in value.items():
+          elements.append([child_key, child_value, element, child_depth, False])
+      else:
+        for child_value in value:
+          elements.append(['item', child_value, element, child_depth, False])
+      elements[-1][-1] = True
+    else:
+      element = ET.SubElement(parent, key)
+      element.text = str(value) if value is not None else ''
+      
+      if not is_last:
+        element.tail = '\n' + ' ' * depth * _INDENT
+      else:
+        element.tail = '\n' + ' ' * (depth - 1) * _INDENT
+  
+  tree = ET.ElementTree(root)
+  tree.write(filepath, encoding=_TEXT_ENCODING, method='html')
 
 
 def save_json(image, drawable, filepath, filename):
