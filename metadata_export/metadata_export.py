@@ -74,42 +74,54 @@ def _get_metadata(image):
   metadata['image']['active_layer'] = _get_item_name(image.active_layer)
   metadata['image']['active_vectors'] = _get_item_name(image.active_vectors)
   
-  layer_attributes_to_exclude = [
-    'ID', 'image', 'children', 'layers', 'mask', 'parent']
-  channel_attributes_to_exclude = [
-    'ID', 'image', 'color', 'colour', 'children', 'layers', 'parent']
-  
-  metadata['image']['layers'] = []
-  layers_and_layer_metadata = []
-  
-  for layer in image.layers:
-    layer_metadata = collections.OrderedDict()
-    metadata['image']['layers'].append(layer_metadata)
-    layers_and_layer_metadata.append((layer, layer_metadata))
-  
-  while layers_and_layer_metadata:
-    layer, layer_metadata = layers_and_layer_metadata.pop(0)
-    
-    layer_metadata['name'] = layer.name
-    layer_metadata['type'] = 'item'
-    layer_metadata.update(_get_item_attributes(layer, layer_attributes_to_exclude))
-    
-    if layer.mask:
-      layer_metadata['mask'] = _get_item_attributes(layer.mask, channel_attributes_to_exclude)
-      layer_metadata['mask']['color'] = str(layer.mask.color)
-    else:
-      layer_metadata['mask'] = None
-    
-    if pdb.gimp_item_is_group(layer):
-      layer_metadata['type'] = 'group'
-      layer_metadata['children'] = []
-      
-      for layer in layer.children:
-        child_metadata = collections.OrderedDict()
-        layer_metadata['children'].append(child_metadata)
-        layers_and_layer_metadata.append((layer, child_metadata))
+  _fill_metadata_from_items(metadata, image, 'layers')
+  _fill_metadata_from_items(metadata, image, 'channels')
+  _fill_metadata_from_items(metadata, image, 'vectors')
   
   return metadata
+
+
+def _fill_metadata_from_items(metadata, image, item_type):
+  attributes_to_exclude = [
+    'ID', 'image', 'color', 'colour', 'children', 'layers', 'mask', 'parent', 'strokes']
+  
+  metadata['image'][item_type] = []
+  items_and_item_metadata = []
+  
+  for item in getattr(image, item_type):
+    item_metadata = collections.OrderedDict()
+    metadata['image'][item_type].append(item_metadata)
+    items_and_item_metadata.append((item, item_metadata))
+  
+  while items_and_item_metadata:
+    item, item_metadata = items_and_item_metadata.pop(0)
+    
+    item_metadata.update(_get_item_metadata(item, attributes_to_exclude, item_metadata))
+    
+    if hasattr(item, 'mask') and item.mask is not None:
+      item_metadata['mask'] = _get_item_metadata(item.mask, attributes_to_exclude)
+    
+    if pdb.gimp_item_is_group(item):
+      item_metadata['children'] = []
+      
+      for item in item.children:
+        child_metadata = collections.OrderedDict()
+        item_metadata['children'].append(child_metadata)
+        items_and_item_metadata.append((item, child_metadata))
+
+
+def _get_item_metadata(item, attributes_to_exclude, metadata_dict=None):
+  if metadata_dict is None:
+    metadata_dict = collections.OrderedDict()
+  
+  metadata_dict['name'] = item.name
+  metadata_dict.update(_get_item_attributes(item, attributes_to_exclude))
+  if hasattr(item, 'color'):
+    metadata_dict['color'] = str(item.color)
+  metadata_dict['color_tag'] = pdb.gimp_item_get_color_tag(item)
+  metadata_dict['expanded'] = bool(pdb.gimp_item_get_expanded(item))
+  
+  return metadata_dict
 
 
 def _get_item_attributes(item, attrs_to_exclude):
