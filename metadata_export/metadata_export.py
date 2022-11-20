@@ -57,7 +57,12 @@ def save_xml(image, drawable, filepath, filename):
       element = ET.SubElement(parent, key)
       
       child_depth = depth + 1
-      element.text = '\n' + ' ' * child_depth * _INDENT
+      
+      if not value:
+        element.text = '\n' + ' ' * (child_depth - 1) * _INDENT
+      else:
+        element.text = '\n' + ' ' * child_depth * _INDENT
+      
       if not is_last:
         element.tail = '\n' + ' ' * depth * _INDENT
       else:
