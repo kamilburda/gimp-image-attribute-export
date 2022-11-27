@@ -35,10 +35,10 @@ Example
 Below is an example of image metadata in the JSON format.
 Only a select few entries are shown for brevity.
 
-```json
+```
 {
     "image": {
-        "name": "test_export_layers_contents.xcf", 
+        "name": "loading_screen_template.xcf", 
         "width": 1024, 
         "height": 512, 
         ...
