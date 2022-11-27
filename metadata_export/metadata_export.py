@@ -97,6 +97,66 @@ def save_json(image, drawable, filepath, filename):
     f.write(unicode(data))
 
 
+def save_yaml(image, drawable, filepath, filename):
+  list_item_str = '- '
+  
+  metadata = _get_metadata(image)
+  data = ''
+  
+  elements = [[key, value, 0] for key, value in metadata['image'].items()]
+  
+  while elements:
+    key, value, depth = elements.pop(0)
+    
+    if isinstance(value, (tuple, list, dict)):
+      indent = ' ' * depth * _INDENT
+      
+      if key is not None:
+        text = indent + '{}:'.format(key)
+        
+        if len(value) < 1:
+          if isinstance(value, dict):
+            text += ' {}'
+          else:
+            text += ' []'
+        
+        text += '\n'
+        
+        data += text
+      else:
+        data += indent + '{}item:\n'.format(list_item_str)
+      
+      if isinstance(value, dict):
+        for child_key, child_value in reversed(value.items()):
+          elements.insert(0, [child_key, child_value, depth + 1])
+      else:
+        for child_value in reversed(value):
+          elements.insert(0, [None, child_value, depth])
+    else:
+      if isinstance(value, bool):
+        text = 'true' if value else 'false'
+      else:
+        if value is not None:
+          text = str(value)
+          
+          if not isinstance(value, (int, float)):
+            text = "'" + text + "'"
+        else:
+          text = 'null'
+      
+      indent = ' ' * depth * _INDENT
+      
+      if key is not None:
+        text = indent + '{}: {}\n'.format(key, text)
+      else:
+        text = indent + '{}{}\n'.format(list_item_str, text)
+      
+      data += text
+  
+  with io.open(filepath, 'w', encoding=_TEXT_ENCODING) as f:
+    f.write(unicode(data))
+
+
 def _get_metadata(image):
   metadata = collections.OrderedDict()
   
@@ -236,6 +296,22 @@ if _json_module_loaded:
     menu='<Save>',
     on_query=lambda: register_save_handler('json'),
     function=save_json)
+
+
+gimpfu.register(
+  proc_name='file-metadata-yaml-save',
+  blurb='Saves image metadata as YAML',
+  help='',
+  author='Kamil Burda',
+  copyright='Kamil Burda',
+  date='2022',
+  label='YAML metadata',
+  imagetypes='*',
+  params=_save_params,
+  results=[],
+  menu='<Save>',
+  on_query=lambda: register_save_handler('yaml'),
+  function=save_yaml)
 
 
 if __name__ == '__main__':
