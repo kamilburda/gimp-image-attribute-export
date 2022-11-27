@@ -5,6 +5,8 @@ This [GIMP](https://www.gimp.org/) plug-in exports various metadata from the spe
 
 Metadata include image properties (e.g. name, dimensions) and a list of layers, channels, vectors and their properties (e.g. dimensions, position, visibility, color tags).
 
+[**Download latest release**](https://github.com/kamilburda/gimp-metadata-export/releases)
+
 
 Installation
 ------------
