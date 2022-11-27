@@ -79,7 +79,6 @@ Only a select few entries are shown for brevity.
 ```
 
 
-
 Support
 -------
 
