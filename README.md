@@ -3,7 +3,7 @@ Metadata Export for GIMP
 
 This [GIMP](https://www.gimp.org/) plug-in exports various metadata from the specified image into an XML, JSON or YAML file.
 
-Metadata include image properties (e.g. name, dimensions) and a list of layers, channels, paths and their properties (e.g. dimensions, position, visibility, color tags).
+Metadata include image properties (e.g. name, dimensions) and a list of layers, channels, vectors and their properties (e.g. dimensions, position, visibility, color tags).
 
 
 Installation
