@@ -96,7 +96,7 @@ def save_json(image, drawable, filepath, filename):
   
   with io.open(filepath.decode(_TEXT_ENCODING), 'w', encoding=_TEXT_ENCODING) as f:
     # Workaround for Python 2 code to properly handle Unicode strings
-    data = json.dumps(metadata, f, indent=_INDENT, ensure_ascii=False)
+    data = json.dumps(metadata, f, indent=_INDENT, ensure_ascii=False, separators=(',', ': '))
     f.write(unicode(data))
 
 
