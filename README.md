@@ -40,41 +40,41 @@ Only a select few entries are shown for brevity.
 ```
 {
     "image": {
-        "name": "loading_screen_template.xcf", 
-        "width": 1024, 
-        "height": 512, 
+        "name": "loading_screen_template.xcf",
+        "width": 1024,
+        "height": 512,
         ...
         "layers": [
             {
-                "name": "Frames", 
-                "height": 386, 
+                "name": "Frames",
+                "height": 386,
                 ...
-                "width": 688, 
+                "width": 688,
                 ...
-                "opacity": 100.0, 
+                "opacity": 100.0,
                 ...
                 "offsets": [
-                    168, 
+                    168,
                     30
-                ], 
+                ],
                 ...
                 "children": [
                     {
-                        "name": "top-frame", 
+                        "name": "top-frame",
                         ...
-                    }, 
+                    },
                     {
-                        "name": "bottom-frame", 
+                        "name": "bottom-frame",
                         ...
                     }
                 ]
-            }, 
+            },
             {
-                "name": "main-background", 
+                "name": "main-background",
                 ...
             }
-        ], 
-        "channels": [], 
+        ],
+        "channels": [],
         "vectors": []
     }
 }
