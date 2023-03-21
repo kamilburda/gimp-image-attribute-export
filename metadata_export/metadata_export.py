@@ -32,6 +32,9 @@ else:
 import collections
 
 
+str = unicode
+
+
 _TEXT_ENCODING = 'utf-8'
 _INDENT = 4
 
@@ -85,13 +88,13 @@ def save_xml(image, drawable, filepath, filename):
         element.tail = '\n' + ' ' * (depth - 1) * _INDENT
   
   tree = ET.ElementTree(root)
-  tree.write(filepath, encoding=_TEXT_ENCODING, method='html')
+  tree.write(filepath.decode(_TEXT_ENCODING), encoding=_TEXT_ENCODING, method='html')
 
 
 def save_json(image, drawable, filepath, filename):
   metadata = _get_metadata(image)
   
-  with io.open(filepath, 'w', encoding=_TEXT_ENCODING) as f:
+  with io.open(filepath.decode(_TEXT_ENCODING), 'w', encoding=_TEXT_ENCODING) as f:
     # Workaround for Python 2 code to properly handle Unicode strings
     data = json.dumps(metadata, f, indent=_INDENT, ensure_ascii=False)
     f.write(unicode(data))
@@ -153,7 +156,7 @@ def save_yaml(image, drawable, filepath, filename):
       
       data += text
   
-  with io.open(filepath, 'w', encoding=_TEXT_ENCODING) as f:
+  with io.open(filepath.decode(_TEXT_ENCODING), 'w', encoding=_TEXT_ENCODING) as f:
     f.write(unicode(data))
 
 
