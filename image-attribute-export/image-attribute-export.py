@@ -6,8 +6,11 @@ from xml.etree import ElementTree as ET
 import gi
 gi.require_version('Babl', '0.1')
 from gi.repository import Babl
+gi.require_version('Gegl', '0.4')
+from gi.repository import Gegl
 gi.require_version('Gimp', '3.0')
 from gi.repository import Gimp
+from gi.repository import GObject
 
 import procedure
 
@@ -208,6 +211,20 @@ def _get_item_attributes(item, attributes_dict=None):
     attributes_dict['has_alpha'] = item.has_alpha()
     attributes_dict['image_type'] = item.type().name
 
+    attributes_dict['filters'] = []
+    for drawable_filter in item.get_filters():
+      attributes_dict['filters'].append({
+        'blend_mode': drawable_filter.get_blend_mode().name,
+        'name': drawable_filter.get_name(),
+        'opacity': drawable_filter.get_opacity(),
+        'operation_name': drawable_filter.get_operation_name(),
+        'visible': drawable_filter.get_visible(),
+        'parameters': {
+          prop.name: _process_config_property(drawable_filter.get_config().get_property(prop.name))
+          for prop in drawable_filter.get_config().list_properties()
+        },
+      })
+
   if isinstance(item, Gimp.Layer):
     attributes_dict['apply_mask'] = item.get_apply_mask()
     attributes_dict['blend_space'] = item.get_blend_space().name
@@ -246,6 +263,17 @@ def _get_item_attributes(item, attributes_dict=None):
 
 def _get_item_names(items):
   return [item.get_name() if item is not None else item for item in items]
+
+
+def _process_config_property(prop):
+  if isinstance(prop, Gegl.Color):
+    return list(prop.get_rgba())
+  elif isinstance(prop, GObject.GEnum):
+    return prop.name
+  elif isinstance(prop, (str, int, float, bool, type(None))):
+    return prop
+  else:
+    return str(prop)
 
 
 def _set_up_xml_format(proc):
