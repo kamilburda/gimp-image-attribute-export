@@ -9,8 +9,15 @@ This [GIMP](https://www.gimp.org/) plug-in exports various attributes from the s
 
 GIMP 3.0.0 or later is required.
 
-1. In GIMP, locate the folder containing GIMP plug-ins - open GIMP and go to Edit → Preferences → Folders → Plug-Ins.
-2. Copy the `image-attribute-export` folder inside one of the folders identified in step 1.
+1. In GIMP, locate the folder containing GIMP plug-ins - open GIMP and go to Edit → Preferences → Folders → Plug-Ins. If you cannot locate any of the folders on your system, you can add a custom folder.
+2. Copy the `image-attribute-export` folder inside one of the folders identified in step 1. The folder hierarchy should look like this:
+    ```
+    plug-ins/
+        ...other plug-in folders...
+        image-attribute-export/
+            image-attribute-export.py
+            procedure.py
+    ```
 
 For Windows, make sure you have GIMP installed with support for Python plug-ins.
 
