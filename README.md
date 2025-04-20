@@ -1,40 +1,29 @@
-Metadata Export for GIMP
-========================
+# Image Attribute Export Plug-in for GIMP
 
-This [GIMP](https://www.gimp.org/) plug-in exports various metadata from the specified image into an XML, JSON or YAML file.
+This [GIMP](https://www.gimp.org/) plug-in exports various attributes from the specified image into an XML, JSON or YAML file. Attributes include (among many others) image name, width, height, a list of layers, layer effects, channels, paths and their attributes (width, height, offsets, visibility, color tags, ...).
 
-Metadata include image properties (e.g. name, dimensions) and a list of layers, channels, vectors and their properties (e.g. dimensions, position, visibility, color tags).
-
-[**Download latest release**](https://github.com/kamilburda/gimp-metadata-export/releases)
+[**Download latest release**](https://github.com/kamilburda/gimp-image-attribute-export/releases)
 
 
-Installation
-------------
+## Installation
 
-GIMP 2.10 is required.
+GIMP 3.0.0 or later is required.
 
 1. In GIMP, locate the folder containing GIMP plug-ins - open GIMP and go to Edit → Preferences → Folders → Plug-Ins.
-2. Copy the `metadata_export` folder inside one of the folders identified in step 1.
+2. Copy the `image-attribute-export` folder inside one of the folders identified in step 1.
 
-For Windows, make sure you have GIMP installed with support for Python scripting.
-
-For Linux, make sure you use a GIMP installation bundled as Flatpak (which can be downloaded from the [official GIMP page](https://www.gimp.org/downloads/)) or AppImage.
-
-For macOS, make sure you have Python 2.7 installed.
+For Windows, make sure you have GIMP installed with support for Python plug-ins.
 
 
-Usage
------
+## Usage
 
-Simply export an image like you normally would (File → Export...) and replace the file extension at the top of the export dialog with `xml`, `json`, or `yaml`. Alternatively, you may select one of these file extensions at the bottom of the export dialog.
+Simply export an image like you normally would (`File → Export...`) and replace the file extension at the top of the export dialog with `xml`, `json`, or `yaml`. Alternatively, you may select one of these file extensions at the bottom of the export dialog.
 
-To save the metadata programmatically (from the command line), use `file-metadata-xml-save`, `file-metadata-json-save` or `file-metadata-yaml-save` from the GIMP procedural database (PDB).
+To export the attributes programmatically (e.g. from the Python-Fu Console), the file export procedures are `file-xml-export`, `file-json-export` and `file-yaml-export`.
 
 
-Example
--------
+## Example of image attributes in the JSON format
 
-Below is an example of image metadata in the JSON format.
 Only a select few entries are shown for brevity.
 
 ```
@@ -46,13 +35,12 @@ Only a select few entries are shown for brevity.
         ...
         "layers": [
             {
+                ...
                 "name": "Frames",
-                "height": 386,
-                ...
+                "visible": True,
                 "width": 688,
-                ...
+                "height": 386,
                 "opacity": 100.0,
-                ...
                 "offsets": [
                     168,
                     30
@@ -60,34 +48,30 @@ Only a select few entries are shown for brevity.
                 ...
                 "children": [
                     {
+                        ...
                         "name": "top-frame",
                         ...
                     },
                     {
+                        ...
                         "name": "bottom-frame",
                         ...
                     }
                 ]
             },
             {
+                ...
                 "name": "main-background",
                 ...
             }
         ],
         "channels": [],
-        "vectors": []
+        "paths": []
     }
 }
 ```
 
 
-Support
--------
-
-You can report issues, ask questions or request new features on the [GitHub issues page](https://github.com/kamilburda/gimp-metadata-export/issues).
-
-
-License
--------
+## License
 
 This plug-in is licensed under the [BSD 3-Clause](LICENSE) license.
