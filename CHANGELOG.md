@@ -1,7 +1,7 @@
 # 2.0
 
 * Ported the plug-in to GIMP 3.
-* Renamed the plug-in to "Image Attribute Export Plug-in for GIMP" (`image-attribute-export`) to avoid confusion with the concept of image metadata (e.g. Exit).
+* Renamed the plug-in to "Image Attribute Export Plug-in for GIMP" (`image-attribute-export`) to avoid confusion with the concept of image metadata (e.g. Exif).
 
 
 # 1.1
