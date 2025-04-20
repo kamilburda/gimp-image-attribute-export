@@ -193,7 +193,7 @@ def _get_item_attributes(item, attributes_dict=None):
   if attributes_dict is None:
     attributes_dict = {}
 
-  attributes_dict['color_tag'] = item.get_color_tag()
+  attributes_dict['color_tag'] = item.get_color_tag().name
   attributes_dict['expanded'] = item.get_expanded()
   attributes_dict['is_group'] = item.is_group()
   attributes_dict['lock_content'] = item.get_lock_content()
